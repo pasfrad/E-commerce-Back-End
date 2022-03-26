@@ -5,7 +5,7 @@ const { Tag, Product, ProductTag } = require('../../models');
 
 router.get('/', async (req, res) => {
   try {
-    const tagData = Tag.findAll({
+    const tagData = await Tag.findAll({
       include: [{ model: Product, though: ProductTag, as: "products_of_tag"}]
     });
     res.status(200).json(tagData);
@@ -33,9 +33,9 @@ router.get('/:id', async (req, res) => {
   // be sure to include its associated Product data
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   try {
-    Tag.create(req.body);
+    await Tag.create(req.body);
     res.status(200).json({ message: 'Tag has been created!' });
   } catch (err) {
     console.log(err);
@@ -44,9 +44,9 @@ router.post('/', (req, res) => {
   // create a new tag
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
-    Tag.update(req.body, {
+    await Tag.update(req.body, {
       where: {
         id: req.params.id,
       },
@@ -67,7 +67,7 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   try {
-    Tag.destroy({
+    await Tag.destroy({
       where: {
         id: req.params.id
       }
